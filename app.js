@@ -1,7 +1,10 @@
 var express = require('express'),
 	http = require('http'),
 	path = require('path'),
-	less = require('less');
+	less = require('less'),
+	uglifyJS = require('uglify-js'),
+	cleanCSS = require('clean-css'),
+	coffeeScript = require('coffee-script');
 
 var app = express();
 
@@ -50,7 +53,7 @@ var rawBody = function(req, res, next) {
 };
 
 app.get('/', function(req, res) {
-	res.render('index', { title: 'Webassets' });
+	res.render('index', {title: 'Webassets'});
 });
 
 app.post('/api', rawBody, function(req, res) {
@@ -58,7 +61,7 @@ app.post('/api', rawBody, function(req, res) {
 
 	if (req.is('text/css')) {
 		res.type('text/css');
-		response = req.rawBody;
+		response = req.query.compress ? cleanCSS.process(req.rawBody) : req.rawBody;
 	}
 
 	if (req.is('text/less')) {
@@ -66,8 +69,22 @@ app.post('/api', rawBody, function(req, res) {
 
 		parser.parse(req.rawBody, function(e, tree) {
 			res.type('text/css');
-			response = tree.toCSS({compress: req.query.compress || false});
+			response = tree.toCSS({compress: req.query.compress ? true : false});
 		});
+	}
+
+	if (req.is('text/javascript')) {
+		res.type('text/javascript');
+		response = req.query.compress ? uglifyJS.minify(req.rawBody, {fromString: true}).code : req.rawBody;
+	}
+
+	if (req.is('text/coffeescript')) {
+		res.type('text/javascript');
+		response = coffeeScript.compile(req.rawBody);
+
+		if (req.query.compress) {
+			response = uglifyJS.minify(response, {fromString: true}).code;
+		}
 	}
 
 	res.send(response);

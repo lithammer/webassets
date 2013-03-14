@@ -1,19 +1,22 @@
 {
-    "name": "webassets",
-    "version": "0.0.1",
-    "dependencies": {
-        "express": "3.1.0",
-        "jade": "*",
-        "less": "*",
-        "less-middleware": "*"
-    },
-	"engines": {
-		"node": "0.10.x",
-		"npm": "1.2.x"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/renstrom/webassets.git"
-	},
-	"license": "MIT"
+  "name": "webassets",
+  "version": "0.0.2",
+  "dependencies": {
+    "express": "3.1.0",
+    "jade": "*",
+    "less": "*",
+    "less-middleware": "*",
+    "uglify-js": "*",
+    "clean-css": "*",
+    "coffee-script": "*"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/renstrom/webassets.git"
+  },
+  "license": "MIT"
 }

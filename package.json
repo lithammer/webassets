@@ -1,13 +1,11 @@
 {
-    "name": "webassets", 
-    "version": "0.0.1"
-    "scripts": {
-        "start": "node web"
-    }, 
+    "name": "webassets",
+    "version": "0.0.1",
     "dependencies": {
-        "express": "3.1.0", 
-        "jade": "*", 
-        "less": "*", 
+        "express": "3.1.0",
+        "jade": "*",
+        "less": "*",
         "less-middleware": "*"
-    }, 
+    },
+	"license": "MIT"
 }

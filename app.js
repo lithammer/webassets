@@ -7,6 +7,7 @@ var express = require('express'),
 	coffeeScript = require('coffee-script');
 
 var app = express();
+module.exports = app;
 
 app.configure(function() {
 	app.set('port', process.env.PORT || 3000);
@@ -90,6 +91,6 @@ app.post('/api', rawBody, function(req, res) {
 	res.send(response);
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function() {
 	console.log('Express server listening on port ' + app.get('port'));
 });

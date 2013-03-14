@@ -38,3 +38,18 @@ Want it compressed as well? Add the `compress=true` query parameter.
 $ curl -X POST --data-binary @style.less -H "Content-Type: text/less" http://webassets.herokuapp.com/api/?compress=true
 a{color:#ff0000;}a .green{color:#008000;}
 ```
+
+## Test
+
+[Mocha](http://visionmedia.github.com/mocha/) is **required** to run tests, install
+it globally with `npm install -g mocha` and start the test runner with:
+
+```bash
+$ mocha test/test.js
+```
+
+Or just:
+
+```bash
+$ mocha
+```

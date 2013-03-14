@@ -23,7 +23,7 @@ a {
 Simply do a POST request with `Content-Type: text/less` to compile LESS to regular CSS.
 
 ```bash
-$ curl -X POST -d @style.less -H "Content-Type: text/less" http://webassets.herokuapp.com/api/
+$ curl -X POST --data-binary @style.less -H "Content-Type: text/less" http://webassets.herokuapp.com/api/
 a {
   color: #ff0000;
 }
@@ -35,12 +35,6 @@ a .green {
 Want it compressed as well? Add the `compress=true` query parameter.
 
 ```bash
-$ curl -X POST -d @style.less -H "Content-Type: text/less" http://webassets.herokuapp.com/api/?compress=true
+$ curl -X POST --data-binary @style.less -H "Content-Type: text/less" http://webassets.herokuapp.com/api/?compress=true
 a{color:#ff0000;}a .green{color:#008000;}
 ```
-
-## Todo
-
-- CSS compression.
-- JavaScript compression.
-- CoffeeScript compilation.

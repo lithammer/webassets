@@ -2,4 +2,35 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p A webservice to compile and compress various web assets, e.g. LESS, JavaScript, CoffeeScript etc.
+
+  h2 Usage
+  p Some LESS code in a file.
+  pre
+    code.
+      $ cat style.less
+      @color-red: red;
+      @color-green: green;
+
+      a {
+          color: @color-red;
+
+          .green {
+              color: @color-green;
+          }
+      })
+  p Simply do a POST request with <code>Content-Type: text/less</code> to compile LESS to regular CSS.
+  pre
+    code.
+      $ curl -X POST --data-binary @style.less -H "Content-Type: text/less" http://webassets.herokuapp.com/api/
+      a {
+        color: #ff0000;
+      }
+      a .green {
+        color: #008000;
+      }
+  p Want it compressed as well? Add the <code>compress=true</code> query parameter.
+  pre
+    code.
+      $ curl -X POST --data-binary @style.less -H "Content-Type: text/less" http://webassets.herokuapp.com/api/?compress=true
+      a{color:#ff0000;}a .green{color:#008000;}

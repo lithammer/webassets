@@ -1,31 +1,31 @@
 var express = require('express'),
-	http = require('http'),
-	path = require('path'),
-	less = require('less'),
+    http = require('http'),
+    path = require('path'),
+    less = require('less'),
     stylus = require('stylus'),
-	uglifyJS = require('uglify-js'),
-	cleanCSS = require('clean-css'),
-	coffeeScript = require('coffee-script');
+    uglifyJS = require('uglify-js'),
+    cleanCSS = require('clean-css'),
+    coffeeScript = require('coffee-script');
 
 var app = express();
 module.exports = app;
 
 app.configure(function() {
-	app.set('port', process.env.PORT || 3000);
-	app.set('views', __dirname + '/views');
-	app.set('view engine', 'jade');
-	app.use(express.favicon());
-	app.use(express.logger('dev'));
-	app.use(express.compress());
-	// app.use(express.bodyParser());
-	app.use(express.methodOverride());
-	app.use(app.router);
-	app.use(require('less-middleware')({ src: __dirname + '/public' }));
-	app.use(express.static(path.join(__dirname, 'public')));
+    app.set('port', process.env.PORT || 3000);
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.favicon());
+    app.use(express.logger('dev'));
+    app.use(express.compress());
+    // app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(app.router);
+    app.use(require('less-middleware')({ src: __dirname + '/public' }));
+    app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('development', function() {
-	app.use(express.errorHandler());
+    app.use(express.errorHandler());
 });
 
 app.configure('production', function() {
@@ -40,41 +40,41 @@ app.configure('production', function() {
  * 3. multipart/form-data
  */
 var rawBody = function(req, res, next) {
-	var data = '';
+    var data = '';
 
-	req.setEncoding('utf-8');
+    req.setEncoding('utf-8');
 
-	req.on('data', function(chunk) {
-		data += chunk;
-	});
+    req.on('data', function(chunk) {
+        data += chunk;
+    });
 
-	req.on('end', function() {
-		req.rawBody = data;
-		next();
-	});
+    req.on('end', function() {
+        req.rawBody = data;
+        next();
+    });
 };
 
 app.get('/', function(req, res) {
-	res.render('index', {title: 'Webassets'});
+    res.render('index', {title: 'Webassets'});
 });
 
 app.post('/api', rawBody, function(req, res) {
-	var response = 'WHY U NO GIVE ME SOMETHING?!';
+    var response = 'WHY U NO GIVE ME SOMETHING?!';
     var compress = req.query.compress ? true : false;
 
-	if (req.is('text/css')) {
-		res.type('text/css');
-		response = req.query.compress ? cleanCSS.process(req.rawBody) : req.rawBody;
-	}
+    if (req.is('text/css')) {
+        res.type('text/css');
+        response = req.query.compress ? cleanCSS.process(req.rawBody) : req.rawBody;
+    }
 
-	if (req.is('text/less')) {
-		var parser = new(less.Parser)();
+    if (req.is('text/less')) {
+        var parser = new(less.Parser)();
 
-		parser.parse(req.rawBody, function(e, tree) {
-			res.type('text/css');
-			response = tree.toCSS({compress: compress});
-		});
-	}
+        parser.parse(req.rawBody, function(e, tree) {
+            res.type('text/css');
+            response = tree.toCSS({compress: compress});
+        });
+    }
 
     if (req.is('text/stylus')) {
         stylus(req.rawBody, {compress: compress}).render(function(err, css) {
@@ -82,23 +82,23 @@ app.post('/api', rawBody, function(req, res) {
         });
     }
 
-	if (req.is('text/javascript')) {
-		res.type('text/javascript');
-		response = req.query.compress ? uglifyJS.minify(req.rawBody, {fromString: true}).code : req.rawBody;
-	}
+    if (req.is('text/javascript')) {
+        res.type('text/javascript');
+        response = req.query.compress ? uglifyJS.minify(req.rawBody, {fromString: true}).code : req.rawBody;
+    }
 
-	if (req.is('text/coffeescript')) {
-		res.type('text/javascript');
-		response = coffeeScript.compile(req.rawBody);
+    if (req.is('text/coffeescript')) {
+        res.type('text/javascript');
+        response = coffeeScript.compile(req.rawBody);
 
-		if (req.query.compress) {
-			response = uglifyJS.minify(response, {fromString: true}).code;
-		}
-	}
+        if (req.query.compress) {
+            response = uglifyJS.minify(response, {fromString: true}).code;
+        }
+    }
 
-	res.send(response);
+    res.send(response);
 });
 
 http.createServer(app).listen(app.get('port'), function() {
-	console.log('Express server listening on port ' + app.get('port'));
+    console.log('Express server listening on port ' + app.get('port'));
 });

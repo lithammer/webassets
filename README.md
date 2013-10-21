@@ -41,7 +41,7 @@ $ curl -X POST --data-binary @style.less -H "Content-Type: text/less" http://web
 a{color:#ff0000;}a .green{color:#008000;}
 ```
 
-## Content-types supported
+## Supported content-types
 
 Content-type                                  | Header
 --------------------------------------------- | ------------

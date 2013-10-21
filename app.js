@@ -30,7 +30,7 @@ app.configure('development', function() {
 app.configure('production', function() {
 });
 
-/* 
+/*
  * Middleware for parsing raw body data, Express's bodyParser only parses
  * incoming data if Content-Type is set to either of:
  *
@@ -59,6 +59,7 @@ app.get('/', function(req, res) {
 
 app.post('/api', rawBody, function(req, res) {
 	var response = 'WHY U NO GIVE ME SOMETHING?!';
+    var compress = req.query.compress ? true : false;
 
 	if (req.is('text/css')) {
 		res.type('text/css');
@@ -70,7 +71,7 @@ app.post('/api', rawBody, function(req, res) {
 
 		parser.parse(req.rawBody, function(e, tree) {
 			res.type('text/css');
-			response = tree.toCSS({compress: req.query.compress ? true : false});
+			response = tree.toCSS({compress: compress});
 		});
 	}
 

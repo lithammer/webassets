@@ -34,3 +34,30 @@ block content
     code.
       $ curl -X POST --data-binary @style.less -H "Content-Type: text/less" http://webassets.herokuapp.com/api/?compress=true
       a{color:#ff0000;}a .green{color:#008000;}
+
+  h2 Supported content-types
+
+  table
+    thead
+      tr
+        th Content-type
+        th Header
+    tbody
+      tr
+        td CSS
+        td text/css
+      tr
+        td
+          a(href='http://lesscss.org/') LESS
+        td text/less
+      tr
+        td
+          a(href='http://learnboost.github.io/stylus/') Stylus
+        td text/stylus
+      tr
+        td JavaScript
+        td text/javascript
+      tr
+        td
+          a(href='http://coffeescript.org/') CoffeeScript
+        td text/coffeescript

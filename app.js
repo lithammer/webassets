@@ -2,6 +2,7 @@ var express = require('express'),
 	http = require('http'),
 	path = require('path'),
 	less = require('less'),
+    stylus = require('stylus'),
 	uglifyJS = require('uglify-js'),
 	cleanCSS = require('clean-css'),
 	coffeeScript = require('coffee-script');
@@ -74,6 +75,12 @@ app.post('/api', rawBody, function(req, res) {
 			response = tree.toCSS({compress: compress});
 		});
 	}
+
+    if (req.is('text/stylus')) {
+        stylus(req.rawBody, {compress: compress}).render(function(err, css) {
+            response = css;
+        });
+    }
 
 	if (req.is('text/javascript')) {
 		res.type('text/javascript');

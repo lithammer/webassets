@@ -59,6 +59,41 @@ describe('POST /api', function() {
 		});
 	});
 
+    describe('Content-Type: text/stylus', function() {
+        var parser = require('stylus');
+        var stylus = 'form input\n' +
+            '  padding 5px\n' +
+            '  border 1px solid\n' +
+            '  border-radius 5px';
+        var compiled, compressed;
+
+        parser(stylus).render(function(err, css) {
+            compiled = css;
+        });
+
+        parser(stylus, {compress: true}).render(function(err, css) {
+            compressed = css;
+        });
+
+
+        it('should return the Stylus compiled to CSS', function(done) {
+            request.post('/api')
+            .type('text/stylus')
+            .send(stylus)
+            .expect(200, compiled)
+            .end(done);
+        });
+
+        it('should return the Stylus compiled to CSS and compressed', function(done) {
+            request.post('/api')
+            .query({compress: true})
+            .type('text/stylus')
+            .send(stylus)
+            .expect(200, compressed)
+            .end(done);
+        });
+    });
+
 	describe('Content-Type: text/javascript', function() {
 		var js = 'var a = 123;\nfunction test(x) { return x; }';
 

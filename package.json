@@ -2,13 +2,13 @@
   "name": "webassets",
   "version": "0.0.2",
   "dependencies": {
-    "express": "3.1.0",
-    "jade": "*",
-    "less": "*",
-    "less-middleware": "*",
-    "uglify-js": "*",
-    "clean-css": "*",
-    "coffee-script": "*"
+    "express": "~3.4.2",
+    "jade": "~0.35.0",
+    "less": "~1.4.2",
+    "less-middleware": "~0.1.12",
+    "uglify-js": "~2.4.0",
+    "clean-css": "~1.1.3",
+    "coffee-script": "~1.6.3",
   },
   "devDependencies": {
     "supertest": "*"

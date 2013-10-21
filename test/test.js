@@ -57,14 +57,19 @@ describe('POST /api', function() {
                 .expect(200, ccless)
                 .end(done);
         });
+
+        it('should return http 400 on bad input', function(done) {
+            request.post('/api')
+            .type('text/less')
+            .send('some bad css')
+            .expect(400)
+            .end(done);
+        });
     });
 
     describe('Content-Type: text/stylus', function() {
         var parser = require('stylus');
-        var stylus = 'form input\n' +
-            '  padding 5px\n' +
-            '  border 1px solid\n' +
-            '  border-radius 5px';
+        var stylus = 'form input\n  padding 5px\n  border 1px solid';
         var compiled, compressed;
 
         parser(stylus).render(function(err, css) {
@@ -90,6 +95,14 @@ describe('POST /api', function() {
             .type('text/stylus')
             .send(stylus)
             .expect(200, compressed)
+            .end(done);
+        });
+
+        it('should return http 400 on bad input', function(done) {
+            request.post('/api')
+            .type('text/stylus')
+            .send('some bad css')
+            .expect(400)
             .end(done);
         });
     });

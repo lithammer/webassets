@@ -59,7 +59,7 @@ app.get('/', function(req, res) {
 });
 
 app.post('/api', rawBody, function(req, res) {
-    var response = 'WHY U NO GIVE ME SOMETHING?!';
+    var response = 400;
     var compress = req.query.compress ? true : false;
 
     if (req.is('text/css')) {
@@ -70,14 +70,21 @@ app.post('/api', rawBody, function(req, res) {
     if (req.is('text/less')) {
         var parser = new(less.Parser)();
 
-        parser.parse(req.rawBody, function(e, tree) {
+        parser.parse(req.rawBody, function(err, tree) {
+            if (err) {
+                return res.send(400);
+            }
             res.type('text/css');
             response = tree.toCSS({compress: compress});
         });
     }
 
     if (req.is('text/stylus')) {
+        res.type('text/css');
         stylus(req.rawBody, {compress: compress}).render(function(err, css) {
+            if (err) {
+                return res.send(400);
+            }
             response = css;
         });
     }

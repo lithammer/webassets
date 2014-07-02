@@ -2,6 +2,7 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     less = require('less'),
+    lessMiddleware = require('less-middleware'),
     stylus = require('stylus'),
     uglifyJS = require('uglify-js'),
     cleanCSS = require('clean-css'),
@@ -20,7 +21,7 @@ app.configure(function() {
     // app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
-    app.use(require('less-middleware')({ src: __dirname + '/public' }));
+    app.use(lessMiddleware(path.join(__dirname, '/public')));
     app.use(express.static(path.join(__dirname, 'public')));
 });
 
@@ -64,7 +65,7 @@ app.post('/api', rawBody, function(req, res) {
 
     if (req.is('text/css')) {
         res.type('text/css');
-        response = req.query.compress ? cleanCSS.process(req.rawBody) : req.rawBody;
+        response = req.query.compress ? new cleanCSS().minify(req.rawBody) : req.rawBody;
     }
 
     if (req.is('text/less')) {

@@ -24,7 +24,7 @@ describe('POST /api', function() {
                 .query({compress: true})
                 .type('text/css')
                 .send(css)
-                .expect(200, cleanCSS.process(css))
+                .expect(200, new cleanCSS().minify(css))
                 .end(done);
         });
     });

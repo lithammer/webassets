@@ -16,7 +16,7 @@
     "supertest": "~0.8.0"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "9.x.x"
   },
   "repository": {
     "type": "git",

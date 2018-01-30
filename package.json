@@ -23,7 +23,7 @@
     "url": "https://github.com/renstrom/webassets.git"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "license": "MIT"
 }

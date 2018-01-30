@@ -5,14 +5,12 @@ var request = require("supertest"),
   cleanCSS = require("clean-css"),
   coffeeScript = require("coffee-script");
 
-request = request(app);
-
 describe("POST /api", function() {
   describe("Content-Type: text/css", function() {
     var css = "a { color: red; }\ndiv { color: black }";
 
     it("should return the same CSS that was passed in", function(done) {
-      request
+      request(app)
         .post("/api")
         .type("text/css")
         .send(css)
@@ -21,7 +19,7 @@ describe("POST /api", function() {
     });
 
     it("should return the compressed CSS", function(done) {
-      request
+      request(app)
         .post("/api")
         .query({ compress: true })
         .type("text/css")
@@ -44,7 +42,7 @@ describe("POST /api", function() {
     });
 
     it("should return the LESS compiled to CSS", function(done) {
-      request
+      request(app)
         .post("/api")
         .type("text/less")
         .send(less)
@@ -53,7 +51,7 @@ describe("POST /api", function() {
     });
 
     it("should return the LESS compiled to CSS and compressed", function(done) {
-      request
+      request(app)
         .post("/api")
         .query({ compress: true })
         .type("text/less")
@@ -63,7 +61,7 @@ describe("POST /api", function() {
     });
 
     it("should return http 400 on bad input", function(done) {
-      request
+      request(app)
         .post("/api")
         .type("text/less")
         .send("some bad css")
@@ -86,7 +84,7 @@ describe("POST /api", function() {
     });
 
     it("should return the Stylus compiled to CSS", function(done) {
-      request
+      request(app)
         .post("/api")
         .type("text/stylus")
         .send(stylus)
@@ -95,7 +93,7 @@ describe("POST /api", function() {
     });
 
     it("should return the Stylus compiled to CSS and compressed", function(done) {
-      request
+      request(app)
         .post("/api")
         .query({ compress: true })
         .type("text/stylus")
@@ -105,7 +103,7 @@ describe("POST /api", function() {
     });
 
     it("should return http 400 on bad input", function(done) {
-      request
+      request(app)
         .post("/api")
         .type("text/stylus")
         .send("some bad css")
@@ -118,7 +116,7 @@ describe("POST /api", function() {
     var js = "var a = 123;\nfunction test(x) { return x; }";
 
     it("should return the same JavaScript that was passed in", function(done) {
-      request
+      request(app)
         .post("/api")
         .type("text/javascript")
         .send(js)
@@ -127,7 +125,7 @@ describe("POST /api", function() {
     });
 
     it("should return the compressed JavaScript", function(done) {
-      request
+      request(app)
         .post("/api")
         .query({ compress: true })
         .type("text/javascript")
@@ -141,7 +139,7 @@ describe("POST /api", function() {
     var cs = 'alert "I knew it!" if elvis?';
 
     it("should return the CoffeeScript compiled to regular JavaScript", function(done) {
-      request
+      request(app)
         .post("/api")
         .type("text/coffeescript")
         .send(cs)
@@ -150,7 +148,7 @@ describe("POST /api", function() {
     });
 
     it("should return the CoffeeScript compiled to regular JavaScript and compressed", function(done) {
-      request
+      request(app)
         .post("/api")
         .query({ compress: true })
         .type("text/coffeescript")

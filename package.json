@@ -2,16 +2,17 @@
   "name": "webassets",
   "version": "0.0.2",
   "dependencies": {
-    "express": "3.4.2",
-    "jade": "1.3.1",
-    "less": "1.7.3",
-    "less-middleware": "1.0.3",
-    "uglify-js": "~2.6",
-    "clean-css": "2.2.5",
-    "coffee-script": "1.7.1",
-    "stylus": "0.47.0"
+    "express": "^3.4.2",
+    "jade": "^1.3.1",
+    "less": "^1.7.3",
+    "less-middleware": "^1.0.3",
+    "uglify-js": "^2.6",
+    "clean-css": "^2.2.5",
+    "coffee-script": "^1.7.1",
+    "stylus": "^0.47.0"
   },
   "devDependencies": {
+    "mocha": "^5.0.0",
     "supertest": "~0.8.0"
   },
   "engines": {

@@ -53,7 +53,7 @@ JavaScript                                    | `text/javascript`
 
 ## Test
 
-[Mocha](http://visionmedia.github.com/mocha/) is required to run tests, install
+[Mocha](http://mochajs.org/) is required to run tests, install
 it globally with `npm install -g mocha` and start the test runner with any of
 the following three:
 

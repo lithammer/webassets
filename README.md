@@ -47,7 +47,7 @@ Content-type                                  | Header
 --------------------------------------------- | ------------
 CSS                                           | `text/css`
 [LESS](http://lesscss.org/)                   | `text/less`
-[Stylus](http://learnboost.github.io/stylus/) | `text/stylus`
+[Stylus](http://stylus-lang.com)              | `text/stylus`
 JavaScript                                    | `text/javascript`
 [CoffeeScript](http://coffeescript.org/)      | `text/coffeescript`
 

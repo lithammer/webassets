@@ -3,19 +3,20 @@
   "version": "0.0.2",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "clean-css": "^2.2.23",
-    "coffeescript": "^1.12.7",
+    "clean-css": "^4.1.11",
+    "coffeescript": "^2.2.4",
     "compression": "^1.7.2",
     "errorhandler": "^1.5.0",
     "express": "^4.16.3",
     "jade": "^1.11.0",
-    "less": "^1.7.5",
-    "less-middleware": "^1.0.4",
+    "less": "^3.0.2",
+    "less-middleware": "^2.2.1",
     "method-override": "^2.3.10",
-    "stylus": "^0.47.3",
-    "uglify-js": "^2.8.29"
+    "stylus": "^0.54.5",
+    "uglify-js": "^3.3.22"
   },
   "devDependencies": {
+    "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "mocha": "^5.1.1",
     "supertest": "^3.0.0"

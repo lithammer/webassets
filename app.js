@@ -1,4 +1,3 @@
-const http = require("http");
 const path = require("path");
 
 const bodyParser = require("body-parser");
@@ -44,29 +43,27 @@ app.get("/", (req, res) => {
   res.render("index", { title: "Webassets" });
 });
 
-app.post("/api", textParser, function(req, res) {
+app.post("/api", textParser, (req, res) => {
   const compress = req.query.compress ? true : false;
 
   if (req.is("text/css")) {
     let body = req.body;
 
     if (compress) {
-      body = new cleanCSS().minify(body);
+      body = new cleanCSS().minify(body).styles;
     }
     res.type("text/css").send(body);
   }
 
   if (req.is("text/less")) {
-    const parser = new less.Parser();
-
-    parser.parse(req.body, function(err, tree) {
-      if (err) {
+    less.render(req.body, { compress: compress }).then(
+      output => {
+        res.type("text/css").send(output.css);
+      },
+      () => {
         res.status(400).send();
-      } else {
-        const body = tree.toCSS({ compress: compress });
-        res.type("text/css").send(body);
       }
-    });
+    );
   }
 
   if (req.is("text/stylus")) {
@@ -83,7 +80,7 @@ app.post("/api", textParser, function(req, res) {
     let body = req.body;
 
     if (compress) {
-      body = uglifyJS.minify(req.body, { fromString: true }).code;
+      body = uglifyJS.minify(req.body, {}).code;
     }
 
     res.type("text/javascript").send(body);
@@ -93,7 +90,7 @@ app.post("/api", textParser, function(req, res) {
     let body = coffeeScript.compile(req.body);
 
     if (compress) {
-      body = uglifyJS.minify(body, { fromString: true }).code;
+      body = uglifyJS.minify(body, {}).code;
     }
 
     res.type("text/javascript").send(body);

@@ -1,13 +1,13 @@
-var request = require("supertest"),
-  uglifyJS = require("uglify-js"),
-  app = require("../app"),
-  uglifyJS = require("uglify-js"),
-  cleanCSS = require("clean-css"),
-  coffeeScript = require("coffee-script");
+const request = require("supertest");
+const uglifyJS = require("uglify-js");
+const cleanCSS = require("clean-css");
+const coffeeScript = require("coffeescript");
+
+const app = require("../app");
 
 describe("POST /api", function() {
   describe("Content-Type: text/css", function() {
-    var css = "a { color: red; }\ndiv { color: black }";
+    const css = "a { color: red; }\ndiv { color: black }";
 
     it("should return the same CSS that was passed in", function(done) {
       request(app)
@@ -30,11 +30,11 @@ describe("POST /api", function() {
   });
 
   describe("Content-Type: text/less", function() {
-    var parser = new (require("less")).Parser();
+    const parser = new (require("less")).Parser();
 
-    var less = "@red: #ff0000;\na { color: #00ff00;\n.red { color: @red; }}",
-      cless /* Compiled */,
-      ccless; /* Compiled and compressed */
+    const less = "@red: #ff0000;\na { color: #00ff00;\n.red { color: @red; }}";
+    let cless; /* Compiled */
+    let ccless; /* Compiled and compressed */
 
     parser.parse(less, function(e, tree) {
       cless = tree.toCSS();
@@ -71,9 +71,10 @@ describe("POST /api", function() {
   });
 
   describe("Content-Type: text/stylus", function() {
-    var parser = require("stylus");
-    var stylus = "form input\n  padding 5px\n  border 1px solid";
-    var compiled, compressed;
+    const parser = require("stylus");
+    const stylus = "form input\n  padding 5px\n  border 1px solid";
+    let compiled;
+    let compressed;
 
     parser(stylus).render(function(err, css) {
       compiled = css;
@@ -113,7 +114,7 @@ describe("POST /api", function() {
   });
 
   describe("Content-Type: text/javascript", function() {
-    var js = "var a = 123;\nfunction test(x) { return x; }";
+    const js = "var a = 123;\nfunction test(x) { return x; }";
 
     it("should return the same JavaScript that was passed in", function(done) {
       request(app)
@@ -136,7 +137,7 @@ describe("POST /api", function() {
   });
 
   describe("Content-Type: text/coffeescript", function() {
-    var cs = 'alert "I knew it!" if elvis?';
+    const cs = 'alert "I knew it!" if elvis?';
 
     it("should return the CoffeeScript compiled to regular JavaScript", function(done) {
       request(app)

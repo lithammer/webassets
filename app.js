@@ -1,117 +1,107 @@
-var express = require("express"),
-  http = require("http"),
-  path = require("path"),
-  less = require("less"),
-  lessMiddleware = require("less-middleware"),
-  stylus = require("stylus"),
-  uglifyJS = require("uglify-js"),
-  cleanCSS = require("clean-css"),
-  coffeeScript = require("coffee-script");
+const http = require("http");
+const path = require("path");
 
-var app = express();
-module.exports = app;
+const bodyParser = require("body-parser");
+const cleanCSS = require("clean-css");
+const coffeeScript = require("coffeescript");
+const compression = require("compression");
+const errorhandler = require("errorhandler");
+const express = require("express");
+const less = require("less");
+const lessMiddleware = require("less-middleware");
+const methodOverride = require("method-override");
+const stylus = require("stylus");
+const uglifyJS = require("uglify-js");
 
-app.configure(function() {
-  app.set("port", process.env.PORT || 3000);
-  app.set("views", __dirname + "/views");
-  app.set("view engine", "jade");
-  app.use(express.favicon());
-  app.use(express.logger("dev"));
-  app.use(express.compress());
-  // app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(lessMiddleware(path.join(__dirname, "/public")));
-  app.use(express.static(path.join(__dirname, "public")));
+const app = express();
+const textParser = bodyParser.text({
+  type: [
+    "text/coffeescript",
+    "text/css",
+    "text/javascript",
+    "text/less",
+    "text/stylus"
+  ]
 });
 
-app.configure("development", function() {
-  app.use(express.errorHandler());
-});
+app.set("port", process.env.PORT || 3000);
+app.set("views", __dirname + "/views");
+app.set("view engine", "jade");
+app.use(compression());
+app.use(methodOverride());
+app.use(lessMiddleware(path.join(__dirname, "/public")));
+app.use(express.static(path.join(__dirname, "public")));
 
-app.configure("production", function() {});
+switch (process.env.NODE_ENV || "development") {
+  case "development":
+    app.use(errorhandler());
+    break;
+  case "production":
+    break;
+}
 
-/*
- * Middleware for parsing raw body data, Express's bodyParser only parses
- * incoming data if Content-Type is set to either of:
- *
- * 1. application/x-www-form-urlencoded
- * 2. application/json
- * 3. multipart/form-data
- */
-var rawBody = function(req, res, next) {
-  var data = "";
-
-  req.setEncoding("utf-8");
-
-  req.on("data", function(chunk) {
-    data += chunk;
-  });
-
-  req.on("end", function() {
-    req.rawBody = data;
-    next();
-  });
-};
-
-app.get("/", function(req, res) {
+app.get("/", (req, res) => {
   res.render("index", { title: "Webassets" });
 });
 
-app.post("/api", rawBody, function(req, res) {
-  var response = 400;
-  var compress = req.query.compress ? true : false;
+app.post("/api", textParser, function(req, res) {
+  const compress = req.query.compress ? true : false;
 
   if (req.is("text/css")) {
-    res.type("text/css");
-    response = req.query.compress
-      ? new cleanCSS().minify(req.rawBody)
-      : req.rawBody;
+    let body = req.body;
+
+    if (compress) {
+      body = new cleanCSS().minify(body);
+    }
+    res.type("text/css").send(body);
   }
 
   if (req.is("text/less")) {
-    var parser = new less.Parser();
+    const parser = new less.Parser();
 
-    parser.parse(req.rawBody, function(err, tree) {
+    parser.parse(req.body, function(err, tree) {
       if (err) {
-        response = 400;
-        return;
+        res.status(400).send();
+      } else {
+        const body = tree.toCSS({ compress: compress });
+        res.type("text/css").send(body);
       }
-      res.type("text/css");
-      response = tree.toCSS({ compress: compress });
     });
   }
 
   if (req.is("text/stylus")) {
-    res.type("text/css");
-    stylus(req.rawBody, { compress: compress }).render(function(err, css) {
+    stylus(req.body, { compress: compress }).render((err, css) => {
       if (err) {
-        response = 400;
-        return;
+        res.status(400).send();
+      } else {
+        res.type("text/css").send(css);
       }
-      response = css;
     });
   }
 
   if (req.is("text/javascript")) {
-    res.type("text/javascript");
-    response = req.query.compress
-      ? uglifyJS.minify(req.rawBody, { fromString: true }).code
-      : req.rawBody;
+    let body = req.body;
+
+    if (compress) {
+      body = uglifyJS.minify(req.body, { fromString: true }).code;
+    }
+
+    res.type("text/javascript").send(body);
   }
 
   if (req.is("text/coffeescript")) {
-    res.type("text/javascript");
-    response = coffeeScript.compile(req.rawBody);
+    let body = coffeeScript.compile(req.body);
 
-    if (req.query.compress) {
-      response = uglifyJS.minify(response, { fromString: true }).code;
+    if (compress) {
+      body = uglifyJS.minify(body, { fromString: true }).code;
     }
+
+    res.type("text/javascript").send(body);
   }
-
-  res.send(response);
 });
 
-http.createServer(app).listen(app.get("port"), function() {
-  console.log("Express server listening on port " + app.get("port"));
-});
+app.listen(app.get("port"), () =>
+  console.log(`Express server listening on port ${app.get("port")}`)
+);
+
+module.exports = app;

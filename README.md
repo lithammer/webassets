@@ -2,7 +2,7 @@
 
 A webservice to compile and compress various web assets, e.g. LESS, JavaScript, CoffeeScript etc.
 
-[![Build Status](https://travis-ci.org/renstrom/webassets.png)](https://travis-ci.org/renstrom/webassets)
+[![Build Status](https://travis-ci.org/lithammer/webassets.png)](https://travis-ci.org/lithammer/webassets)
 
 ## Usage
 

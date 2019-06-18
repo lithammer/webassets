@@ -25,7 +25,7 @@ const textParser = bodyParser.text({
 
 app.set("port", process.env.PORT || 3000);
 app.set("views", __dirname + "/views");
-app.set("view engine", "jade");
+app.set("view engine", "pug");
 app.use(compression());
 app.use(methodOverride());
 app.use(lessMiddleware(path.join(__dirname, "/public")));

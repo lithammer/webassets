@@ -21,9 +21,6 @@
     "mocha": "^6.2.3",
     "supertest": "^3.4.2"
   },
-  "engines": {
-    "node": "9.x.x"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/lithammer/webassets.git"
